@@ -39,9 +39,9 @@
 
 <script>
   const params = new URLSearchParams(window.location.search);
-  const entityName = params.get('field_194831935') || params.get('194831935') || '';
-  const engagementYear = params.get('field_194832166') || params.get('194832166') || '';
-  const entityType = params.get('field_194831994') || params.get('194831994') || '';
+  const entityName = params.get('entity__client_name') || '';
+  const engagementYear = params.get('year') || '';
+  const entityType = params.get('entity_type') || '';
 
   document.getElementById('entityName').textContent = entityName;
   document.getElementById('entityType').textContent = entityType;
