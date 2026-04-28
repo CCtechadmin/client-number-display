@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Client Number — Chawla & Chawla CPA</title>
+<style>
+  body { font-family: -apple-system, Segoe UI, Arial, sans-serif; max-width: 600px; margin: 60px auto; padding: 20px; color: #222; }
+  h1 { font-size: 20px; color: #555; margin-bottom: 8px; }
+  .number { font-size: 56px; font-weight: 700; color: #0066cc; margin: 20px 0; letter-spacing: 2px; }
+  .details { background: #f4f6f8; padding: 16px 20px; border-radius: 8px; margin: 20px 0; }
+  .details div { margin: 4px 0; }
+  .label { color: #666; display: inline-block; width: 80px; }
+  button { background: #0066cc; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; cursor: pointer; margin-right: 8px; }
+  button:hover { background: #0052a3; }
+  .secondary { background: #888; }
+  .secondary:hover { background: #666; }
+  .loading { color: #888; font-style: italic; }
+  .error { color: #cc0000; background: #fff0f0; padding: 16px; border-radius: 8px; }
+</style>
+</head>
+<body>
+
+<h1>Client Number Generated</h1>
+
+<div id="loading" class="loading">Looking up your client number…</div>
+
+<div id="result" style="display:none;">
+  <div class="number" id="clientNumber">—</div>
+  <div class="details">
+    <div><span class="label">Entity:</span> <span id="entityName">—</span></div>
+    <div><span class="label">Type:</span> <span id="entityType">—</span></div>
+    <div><span class="label">Year:</span> <span id="engagementYear">—</span></div>
+  </div>
+  <button onclick="copyNumber()">Copy Number</button>
+  <button class="secondary" onclick="window.location.href='https://www.formstack.com/forms/'">Submit Another</button>
+</div>
+
+<div id="error" class="error" style="display:none;"></div>
+
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const entityName = params.get('field_194831935') || params.get('194831935') || '';
+  const engagementYear = params.get('field_194832166') || params.get('194832166') || '';
+  const entityType = params.get('field_194831994') || params.get('194831994') || '';
+
+  document.getElementById('entityName').textContent = entityName;
+  document.getElementById('entityType').textContent = entityType;
+  document.getElementById('engagementYear').textContent = engagementYear;
+
+  // Placeholder — we'll wire this to a real n8n endpoint in the next step
+  setTimeout(() => {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('clientNumber').textContent = 'PENDING';
+  }, 800);
+
+  function copyNumber() {
+    const num = document.getElementById('clientNumber').textContent;
+    navigator.clipboard.writeText(num);
+    alert('Copied: ' + num);
+  }
+</script>
+
+</body>
+</html>
