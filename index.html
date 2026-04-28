@@ -2,40 +2,239 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Client Number — Chawla & Chawla CPA</title>
+<title>Client Number — Chawla & Chawla, P.C.</title>
 <style>
-  body { font-family: -apple-system, Segoe UI, Arial, sans-serif; max-width: 600px; margin: 60px auto; padding: 20px; color: #222; }
-  h1 { font-size: 20px; color: #555; margin-bottom: 8px; }
-  .number { font-size: 56px; font-weight: 700; color: #0066cc; margin: 20px 0; letter-spacing: 2px; }
-  .details { background: #f4f6f8; padding: 16px 20px; border-radius: 8px; margin: 20px 0; }
-  .details div { margin: 4px 0; }
-  .label { color: #666; display: inline-block; width: 80px; }
-  button { background: #0066cc; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; cursor: pointer; margin-right: 8px; }
-  button:hover { background: #0052a3; }
-  .secondary { background: #888; }
-  .secondary:hover { background: #666; }
-  .loading { color: #888; font-style: italic; }
-  .error { color: #cc0000; background: #fff0f0; padding: 16px; border-radius: 8px; }
+  :root {
+    --navy: #1B2D4F;
+    --navy-dark: #0F1B33;
+    --navy-light: #E8ECF3;
+    --text: #1a1a1a;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+    --bg: #fafafa;
+    --success: #047857;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 40px 24px;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+  }
+  .header {
+    border-bottom: 2px solid var(--navy);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  .firm-name {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: 0.5px;
+    margin: 0;
+  }
+  .firm-tagline {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin: 4px 0 0;
+  }
+  .card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  }
+  h1 {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--muted);
+    margin: 0 0 8px;
+  }
+  .check {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background: var(--success);
+    color: white;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 20px;
+    font-size: 12px;
+    margin-right: 8px;
+    vertical-align: middle;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+  }
+  .check.visible { opacity: 1; }
+  .number-wrap {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    border-radius: 10px;
+    padding: 28px 24px;
+    margin: 20px 0 28px;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  .number-wrap.visible { opacity: 1; transform: translateY(0); }
+  .number-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: rgba(255,255,255,0.65);
+    margin: 0 0 8px;
+  }
+  .number {
+    font-size: 56px;
+    font-weight: 700;
+    color: white;
+    margin: 0;
+    letter-spacing: 4px;
+    font-variant-numeric: tabular-nums;
+  }
+  .details {
+    border-top: 1px solid var(--border);
+    padding-top: 20px;
+    margin-bottom: 24px;
+  }
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 0;
+    font-size: 14px;
+  }
+  .detail-row .label {
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .detail-row .value {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  button {
+    flex: 1;
+    min-width: 140px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .btn-primary {
+    background: var(--navy);
+    color: white;
+    border: 1px solid var(--navy);
+  }
+  .btn-primary:hover { background: var(--navy-dark); border-color: var(--navy-dark); }
+  .btn-primary.copied { background: var(--success); border-color: var(--success); }
+  .btn-secondary {
+    background: white;
+    color: var(--navy);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover { background: var(--navy-light); }
+  .icon { width: 14px; height: 14px; }
+  .loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    gap: 12px;
+    color: var(--muted);
+    font-size: 14px;
+  }
+  .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--border);
+    border-top-color: var(--navy);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .error {
+    color: #991b1b;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    padding: 16px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+  .footer {
+    text-align: center;
+    margin-top: 32px;
+    font-size: 12px;
+    color: var(--muted);
+  }
 </style>
 </head>
 <body>
 
-<h1>Client Number Generated</h1>
-
-<div id="loading" class="loading">Looking up your client number…</div>
-
-<div id="result" style="display:none;">
-  <div class="number" id="clientNumber">—</div>
-  <div class="details">
-    <div><span class="label">Entity:</span> <span id="entityName">—</span></div>
-    <div><span class="label">Type:</span> <span id="entityType">—</span></div>
-    <div><span class="label">Year:</span> <span id="engagementYear">—</span></div>
-  </div>
-  <button onclick="copyNumber()">Copy Number</button>
-  <button class="secondary" onclick="window.location.href='https://ChawlaandChawlaPC.formstack.com/forms/8f3a2c91d47e6b5f0a18c2d9e74b3f6a5c8d1e02'">Submit Another</button>
+<div class="header">
+  <p class="firm-name">Chawla & Chawla, P.C.</p>
+  <p class="firm-tagline">Certified Public Accountants</p>
 </div>
 
-<div id="error" class="error" style="display:none;"></div>
+<div class="card">
+  <h1><span class="check" id="check">✓</span><span id="header-text">Generating client number</span></h1>
+
+  <div id="loading" class="loading">
+    <div class="spinner"></div>
+    <span>Looking up your client number…</span>
+  </div>
+
+  <div id="result" style="display:none;">
+    <div class="number-wrap" id="numberWrap">
+      <p class="number-label">Client Number</p>
+      <p class="number" id="clientNumber">—</p>
+    </div>
+
+    <div class="details">
+      <div class="detail-row"><span class="label">Entity</span><span class="value" id="entityName">—</span></div>
+      <div class="detail-row"><span class="label">Type</span><span class="value" id="entityType">—</span></div>
+      <div class="detail-row"><span class="label">Year</span><span class="value" id="engagementYear">—</span></div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-primary" id="copyBtn" onclick="copyNumber()">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="9" y="9" width="13" height="13" rx="2"/>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+        </svg>
+        <span id="copyText">Copy Number</span>
+      </button>
+      <button class="btn-secondary" onclick="window.location.href='https://ChawlaandChawlaPC.formstack.com/forms/8f3a2c91d47e6b5f0a18c2d9e74b3f6a5c8d1e02'">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 5v14M5 12h14"/>
+        </svg>
+        Submit Another
+      </button>
+    </div>
+  </div>
+
+  <div id="error" class="error" style="display:none;"></div>
+</div>
+
+<p class="footer">Client number generated and saved to SharePoint register</p>
 
 <script>
   const params = new URLSearchParams(window.location.search);
@@ -49,15 +248,12 @@
 
   const lookupUrl = `https://n8n.chawlaandchawlacpa.com/webhook/client-number-lookup?entity=${encodeURIComponent(entityName)}&year=${encodeURIComponent(engagementYear)}`;
 
-  // Retry up to 5 times in case n8n is still writing the row
   async function fetchWithRetry(attempt = 1) {
     try {
       const res = await fetch(lookupUrl);
       const data = await res.json();
       if (data.found && data.clientNumber) {
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('clientNumber').textContent = data.clientNumber;
+        showResult(data.clientNumber);
       } else if (attempt < 5) {
         setTimeout(() => fetchWithRetry(attempt + 1), 1000);
       } else {
@@ -72,16 +268,35 @@
     }
   }
 
+  function showResult(num) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('result').style.display = 'block';
+    document.getElementById('clientNumber').textContent = num;
+    document.getElementById('header-text').textContent = 'Client number generated';
+    setTimeout(() => {
+      document.getElementById('check').classList.add('visible');
+      document.getElementById('numberWrap').classList.add('visible');
+    }, 50);
+  }
+
   function showError(msg) {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('error').style.display = 'block';
     document.getElementById('error').textContent = msg;
+    document.getElementById('header-text').textContent = 'Error';
   }
 
   function copyNumber() {
     const num = document.getElementById('clientNumber').textContent;
     navigator.clipboard.writeText(num);
-    alert('Copied: ' + num);
+    const btn = document.getElementById('copyBtn');
+    const txt = document.getElementById('copyText');
+    btn.classList.add('copied');
+    txt.textContent = 'Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      txt.textContent = 'Copy Number';
+    }, 2000);
   }
 
   fetchWithRetry();
