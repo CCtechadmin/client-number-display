@@ -47,21 +47,45 @@
   document.getElementById('entityType').textContent = entityType;
   document.getElementById('engagementYear').textContent = engagementYear;
 
-  // Placeholder — we'll wire this to a real n8n endpoint in the next step
-  setTimeout(() => {
+  const lookupUrl = `https://n8n.chawlaandchawlacpa.com/webhook/client-number-lookup?entity=${encodeURIComponent(entityName)}&year=${encodeURIComponent(engagementYear)}`;
+
+  // Retry up to 5 times in case n8n is still writing the row
+  async function fetchWithRetry(attempt = 1) {
+    try {
+      const res = await fetch(lookupUrl);
+      const data = await res.json();
+      if (data.found && data.clientNumber) {
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('clientNumber').textContent = data.clientNumber;
+      } else if (attempt < 5) {
+        setTimeout(() => fetchWithRetry(attempt + 1), 1000);
+      } else {
+        showError('Client number could not be found. Please check the SharePoint register.');
+      }
+    } catch (err) {
+      if (attempt < 5) {
+        setTimeout(() => fetchWithRetry(attempt + 1), 1000);
+      } else {
+        showError('Lookup failed: ' + err.message);
+      }
+    }
+  }
+
+  function showError(msg) {
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('result').style.display = 'block';
-    document.getElementById('clientNumber').textContent = 'PENDING';
-  }, 800);
+    document.getElementById('error').style.display = 'block';
+    document.getElementById('error').textContent = msg;
+  }
 
   function copyNumber() {
     const num = document.getElementById('clientNumber').textContent;
     navigator.clipboard.writeText(num);
     alert('Copied: ' + num);
   }
+
+  fetchWithRetry();
 </script>
 
 </body>
 </html>
- 
- 
